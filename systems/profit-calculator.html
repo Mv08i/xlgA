@@ -1,0 +1,228 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profit Calculator - Stardew Valley Guide</title>
+<meta name="description" content="Stardew Valley crop profit calculator: enter crop parameters to calculate profit and efficiency.">
+<link rel="canonical" href="https://stardewvalleyguide.com/systems/profit-calculator.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg sticky-top">
+ <div class="container">
+  <a class="navbar-brand" href="../index.html"><span>🌾</span> Stardew Valley Guide</a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+   <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+   <ul class="navbar-nav ms-auto">
+    <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+    <li class="nav-item"><a class="nav-link" href="../start-here.html">Getting Started</a></li>
+    <li class="nav-item"><a class="nav-link" href="../foundations/index.html">Foundations</a></li>
+    <li class="nav-item"><a class="nav-link active" href="index.html">Systems</a></li>
+    <li class="nav-item"><a class="nav-link" href="../skills/index.html">Skills</a></li>
+    <li class="nav-item"><a class="nav-link" href="../tools/index.html">Tools</a></li>
+    <li class="nav-item"><a class="nav-link" href="../comparisons/index.html">Comparisons</a></li>
+    <li class="nav-item"><a class="nav-link" href="../case-studies/index.html">Case Studies</a></li>
+   </ul>
+   <div class="ms-3"><a href="../about.html" class="btn btn-outline-custom">About</a></div>
+  </div>
+ </div>
+</nav>
+
+<div class="content-page">
+ <div class="container">
+  <div class="breadcrumb">
+   <a href="../index.html">Home</a> &raquo; <a href="index.html">Systems</a> &raquo; Profit Calculator
+  </div>
+
+  <h1>💰 Crop Profit Calculator</h1>
+  <p class="lead">Enter crop parameters to calculate each crop's profit and efficiency, helping you make the best choice.</p>
+
+  <div class="average-calc-form">
+   <h3>📊 Profit Calculation</h3>
+   <div class="row">
+    <div class="col-md-6">
+     <label>Seed Price (G)</label>
+     <input type="number" id="seedPrice" value="20" min="0">
+    </div>
+    <div class="col-md-6">
+     <label>Crop Sale Price (G)</label>
+     <input type="number" id="sellPrice" value="35" min="0">
+    </div>
+    <div class="col-md-6">
+     <label>Growth Cycle (days)</label>
+     <input type="number" id="growDays" value="4" min="1">
+    </div>
+    <div class="col-md-6">
+     <label>Plant Count</label>
+     <input type="number" id="plantCount" value="20" min="1">
+    </div>
+    <div class="col-md-6">
+     <label>Number of Harvests (enter the count for multi-harvest crops; enter 1 for single-harvest)</label>
+     <input type="number" id="harvestCount" value="1" min="1">
+    </div>
+    <div class="col-md-6">
+     <label>Watering Energy (per plant)</label>
+     <input type="number" id="waterEnergy" value="1" min="0">
+    </div>
+   </div>
+   <div class="text-center mt-3">
+    <button class="btn btn-primary-custom" onclick="calculateProfit()">🧮 Calculate Profit</button>
+    <button class="btn btn-outline-custom ms-2" onclick="resetForm()">🔄 Reset</button>
+   </div>
+  </div>
+
+  <div id="resultBox" class="result-box" style="display: none;">
+   <div class="result-label">Profit per Plant</div>
+   <div class="result-value" id="perPlantProfit">-</div>
+   <div class="result-label mt-3">Total Profit</div>
+   <div class="result-value" id="totalProfit">-</div>
+   <div class="result-label mt-3">Daily Profit</div>
+   <div class="result-value" id="dailyProfit">-</div>
+   <div class="result-label mt-3">Profit per Energy</div>
+   <div class="result-value" id="energyProfit">-</div>
+  </div>
+
+  <h2>📋 Preset Crops</h2>
+  <p>Click a crop below to quickly fill in the parameters:</p>
+  <div class="row g-3 mb-4">
+   <div class="col-md-4">
+    <div class="how-to-use-item" onclick="usePreset(20, 35, 4, 1)">
+     <strong>🌱 Parsnip</strong>
+     <p class="mb-0">Seed 20G | Sale 35G | 4 days to mature</p>
+    </div>
+   </div>
+   <div class="col-md-4">
+    <div class="how-to-use-item" onclick="usePreset(80, 175, 12, 1)">
+     <strong>🥦 Cauliflower</strong>
+     <p class="mb-0">Seed 80G | Sale 175G | 12 days to mature</p>
+    </div>
+   </div>
+   <div class="col-md-4">
+    <div class="how-to-use-item" onclick="usePreset(50, 80, 6, 1)">
+     <strong>🥔 Potato</strong>
+     <p class="mb-0">Seed 50G | Sale 80G | 6 days to mature</p>
+    </div>
+   </div>
+   <div class="col-md-4">
+    <div class="how-to-use-item" onclick="usePreset(80, 150, 13, 3)">
+     <strong>🫐 Blueberry</strong>
+     <p class="mb-0">Seed 80G | Sale 150G/harvest (50G × 3 berries) | 13 days to mature | 3 harvests</p>
+    </div>
+   </div>
+   <div class="col-md-4">
+    <div class="how-to-use-item" onclick="usePreset(80, 250, 12, 1)">
+     <strong>🍈 Melon</strong>
+     <p class="mb-0">Seed 80G | Sale 250G | 12 days to mature</p>
+    </div>
+   </div>
+   <div class="col-md-4">
+    <div class="how-to-use-item" onclick="usePreset(40, 40, 5, 3)">
+     <strong>🌶️ Hot Pepper</strong>
+     <p class="mb-0">Seed 40G | Sale 40G | 5 days to mature | 3 harvests</p>
+    </div>
+   </div>
+   <div class="col-md-4">
+    <div class="how-to-use-item" onclick="usePreset(100, 320, 13, 1)">
+     <strong>🎃 Pumpkin</strong>
+     <p class="mb-0">Seed 100G | Sale 320G | 13 days to mature</p>
+    </div>
+   </div>
+   <div class="col-md-4">
+    <div class="how-to-use-item" onclick="usePreset(240, 150, 7, 3)">
+     <strong>🍒 Cranberry</strong>
+     <p class="mb-0">Seed 240G | Sale 150G/harvest (75G × 2 berries) | 7 days to mature | 3 harvests</p>
+    </div>
+   </div>
+   <div class="col-md-4">
+    <div class="how-to-use-item" onclick="usePreset(20, 60, 5, 3)">
+     <strong>🍆 Eggplant</strong>
+     <p class="mb-0">Seed 20G | Sale 60G | 5 days to mature | 3 harvests</p>
+    </div>
+   </div>
+  </div>
+
+  <h2>📖 Usage Notes</h2>
+  <ul>
+   <li>Profit per plant = (sale price × number of harvests) - seed price</li>
+   <li>Total profit = profit per plant × plant count</li>
+   <li>Daily profit = profit per plant / growth cycle</li>
+   <li>Energy efficiency = profit per plant / (watering energy × growth days)</li>
+  </ul>
+
+  <div class="info-box">
+   <strong>💡 Tips</strong>
+   <p class="mb-0">In actual play, the advanced Farming skill (Tiller branch) gives a 10% sale price bonus. Quality Sprinklers can save watering energy.</p>
+  </div>
+
+  <div class="text-center mt-5">
+   <a href="index.html" class="btn btn-primary-custom">← Back to Systems</a>
+   <a href="../start-here.html" class="btn btn-outline-custom ms-3">📚 Learning Path</a>
+   <a href="../index.html" class="btn btn-outline-custom ms-3">🏠 Back to Home</a>
+  </div>
+ </div>
+</div>
+
+<footer class="footer">
+ <div class="container">
+  <div class="footer-bottom">
+   <p>© 2026 Stardew Valley Guide. This is an unofficial fan site. Content is for reference only. Stardew Valley © ConcernedApe.</p>
+  </div>
+ </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function calculateProfit() {
+ const seedPrice = parseFloat(document.getElementById('seedPrice').value);
+ const sellPrice = parseFloat(document.getElementById('sellPrice').value);
+ const growDays = parseFloat(document.getElementById('growDays').value);
+ const plantCount = parseFloat(document.getElementById('plantCount').value);
+ const harvestCount = parseFloat(document.getElementById('harvestCount').value);
+ const waterEnergy = parseFloat(document.getElementById('waterEnergy').value);
+
+ if (isNaN(seedPrice) || isNaN(sellPrice) || isNaN(growDays) || isNaN(plantCount)) {
+  alert('Please fill in all numeric fields!');
+  return;
+ }
+
+ const perPlantProfit = (sellPrice * harvestCount) - seedPrice;
+ const totalProfit = perPlantProfit * plantCount;
+ const dailyProfit = perPlantProfit / growDays;
+ const totalWaterEnergy = waterEnergy * growDays;
+ const energyProfit = totalWaterEnergy > 0 ? perPlantProfit / totalWaterEnergy : perPlantProfit;
+
+ document.getElementById('perPlantProfit').textContent = perPlantProfit.toFixed(0) + ' G';
+ document.getElementById('totalProfit').textContent = totalProfit.toFixed(0) + ' G';
+ document.getElementById('dailyProfit').textContent = dailyProfit.toFixed(1) + ' G/day';
+ document.getElementById('energyProfit').textContent = energyProfit.toFixed(1) + ' G/energy';
+
+ document.getElementById('resultBox').style.display = 'block';
+ document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function resetForm() {
+ document.getElementById('seedPrice').value = 20;
+ document.getElementById('sellPrice').value = 35;
+ document.getElementById('growDays').value = 4;
+ document.getElementById('plantCount').value = 20;
+ document.getElementById('harvestCount').value = 1;
+ document.getElementById('waterEnergy').value = 1;
+ document.getElementById('resultBox').style.display = 'none';
+}
+
+function usePreset(seed, sell, days, harvest) {
+ document.getElementById('seedPrice').value = seed;
+ document.getElementById('sellPrice').value = sell;
+ document.getElementById('growDays').value = days;
+ document.getElementById('harvestCount').value = harvest;
+ calculateProfit();
+}
+</script>
+</body>
+</html>
